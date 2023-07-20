@@ -130,8 +130,8 @@ var (
 
 // StatTotals
 var (
-	// MAlertingActiveAlerts is a metric amount of active alerts
-	MAlertingActiveAlerts prometheus.Gauge
+	// MAlertingActiveAlerts is a metric amount of active alerts, labeled by state
+	MAlertingActiveAlerts *prometheus.GaugeVec
 
 	// MStatTotalDashboards is a metric total amount of dashboards
 	MStatTotalDashboards prometheus.Gauge
@@ -408,11 +408,11 @@ func init() {
 		Namespace:  ExporterName,
 	})
 
-	MAlertingActiveAlerts = prometheus.NewGauge(prometheus.GaugeOpts{
+	MAlertingActiveAlerts = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name:      "alerting_active_alerts",
-		Help:      "amount of active alerts",
+		Help:      "amount of active alerts, labeled by state",
 		Namespace: ExporterName,
-	})
+	}, []string{"state"})
 
 	MPublicDashboardRequestCount = metricutil.NewCounterStartingAtZero(prometheus.CounterOpts{
 		Name:      "public_dashboard_request_count",
